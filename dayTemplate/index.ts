@@ -26,9 +26,9 @@ const myFunction = (input: Input) => {
 // Solve problem
 // -------------
 
-const problem1: Solver = () => myFunction(INPUT);
+const problem1: Solver = () => myFunction(TEST_INPUT);
 
-// const problem2: Solver = () => myFunction(INPUT);
+// const problem2: Solver = () => myFunction(TEST_INPUT);
 
 // ---------------
 // Display answers
