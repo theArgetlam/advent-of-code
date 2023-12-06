@@ -20,5 +20,5 @@ export const solveWithLogs = (solver: Solver, problemIndex: 1 | 2) => {
     console.info('\n');
 };
 
-export const deepObjectToString = (object: Record<string, unknown>, depth: number = null): string =>
+export const deepObjectToString = (object: unknown, depth: number = null): string =>
     util.inspect(object, true, depth);
