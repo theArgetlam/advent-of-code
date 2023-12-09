@@ -73,7 +73,6 @@ const parseInput = (input: Input): Almanac => {
     input.forEach((rawMap, mapIndex) => {
         const lines = rawMap.split('\n');
         lines.shift();
-        // const mapName = lines.shift().replace(' map:', '');
         almanac.maps[mapIndex] = [];
         lines.forEach((line) => {
             const parts = line.split(' ');
@@ -83,7 +82,9 @@ const parseInput = (input: Input): Almanac => {
                 range: +parts[2],
             });
         });
-        almanac.maps[mapIndex] = almanac.maps[mapIndex].sort((mapRangeA: MapRange, mapRangeB: MapRange) => )
+        almanac.maps[mapIndex] = almanac.maps[mapIndex].sort(
+            (mapRangeA: MapRange, mapRangeB: MapRange) => mapRangeA.source - mapRangeB.source,
+        );
     });
 
     return almanac;
@@ -117,31 +118,37 @@ const findLowestLocationBySeed = (input: Input) => {
 type Range = [number, number];
 
 const mapRanges = (ranges: Range[], map: Map): Range[] => {
+    const newRanges = [];
 
+    ranges.forEach(([start, end]) => {
+        const firstCut = map.find(
+            ({ source, range }) =>
+                (start < source && end >= source) || (start >= source && end > source + range),
+        );
+        // if (!firstCut) {
+        //     newRanges.push([start, end]);
+        // } else {
+        // }
+    });
 
-    // for (let i = 0; i < map.length; i++) {
-    //     const { source, destination, range } = map[i];
-    //     if (num >= source && num <= source + range) {
-    //         return num - source + destination;
-    //     }
-    // }
-
-    return [];
+    return newRanges;
 };
 
 const findLowestLocationBySeedRange = (input: Input) => {
     const almanac = parseInput(input);
     const seedRanges: Range[] = [];
 
-    for (let i = 0; i < almanac.seeds.length - 1; i + 2) {
+    console.log(almanac.seeds, almanac.maps);
+
+    for (let i = 0; i < almanac.seeds.length - 1; i += 2) {
         seedRanges.push([almanac.seeds[i], almanac.seeds[i] + almanac.seeds[i + 1]]);
     }
 
-    const locationsRanges = seedRanges.map((seedRange) =>
-        almanac.maps.reduce((pos, map) => mapRanges(pos, map), [seedRange]),
-    );
+    console.log(seedRanges);
 
-    // console.log(almanac.seeds, almanac.maps);
+    const locationsRanges = seedRanges.map((seedRange) =>
+        almanac.maps.reduce((newRanges, map) => mapRanges(newRanges, map), [seedRange]),
+    );
 
     return 0;
 };
@@ -150,15 +157,15 @@ const findLowestLocationBySeedRange = (input: Input) => {
 // Solve problem
 // -------------
 
-const problem1: Solver = () => findLowestLocationBySeed(INPUT);
+// const problem1: Solver = () => findLowestLocationBySeed(INPUT);
 
-// const problem2: Solver = () => findLowestLocationBySeedRange(TEST_INPUT);
+const problem2: Solver = () => findLowestLocationBySeedRange(TEST_INPUT);
 
 // ---------------
 // Display answers
 // ---------------
 
-solveWithLogs(problem1, 1);
+// solveWithLogs(problem1, 1);
 // 177942185
 
-// solveWithLogs(problem2, 2);
+solveWithLogs(problem2, 2);
