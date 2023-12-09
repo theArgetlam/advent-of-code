@@ -1,5 +1,5 @@
 import path from 'path';
-import { deepObjectToString, solveWithLogs } from '../utils/logs';
+import { solveWithLogs } from '../utils/logs';
 import { readInput } from '../utils/readFile';
 import { Solver } from 'utils/solver';
 
@@ -121,14 +121,39 @@ const mapRanges = (ranges: Range[], map: Map): Range[] => {
     const newRanges = [];
 
     ranges.forEach(([start, end]) => {
-        const firstCut = map.find(
-            ({ source, range }) =>
-                (start < source && end >= source) || (start >= source && end > source + range),
-        );
-        // if (!firstCut) {
-        //     newRanges.push([start, end]);
-        // } else {
-        // }
+        let currentStart = start;
+        while (currentStart !== end) {
+            const includesStart = map.find(
+                // eslint-disable-next-line no-loop-func
+                ({ source, range }) => currentStart >= source && currentStart < source + range,
+            );
+
+            if (includesStart) {
+                const { source, range, destination } = includesStart;
+                const offset = destination - source;
+                // Range starts in a map range
+                if (end < source + range) {
+                    // Whole range is to be mapped
+                    newRanges.push([currentStart + offset, end + offset]);
+                    currentStart = end;
+                } else {
+                    newRanges.push([currentStart + offset, source + range - 1 + offset]);
+                    currentStart = source + range;
+                }
+            } else {
+                // eslint-disable-next-line no-loop-func
+                const firstCross = map.find(({ source }) => currentStart < source && end >= source);
+
+                if (!firstCross) {
+                    newRanges.push([currentStart, end]);
+                    currentStart = end;
+                } else {
+                    const { source } = firstCross;
+                    newRanges.push([currentStart, source - 1]);
+                    currentStart = source;
+                }
+            }
+        }
     });
 
     return newRanges;
@@ -138,34 +163,32 @@ const findLowestLocationBySeedRange = (input: Input) => {
     const almanac = parseInput(input);
     const seedRanges: Range[] = [];
 
-    console.log(almanac.seeds, almanac.maps);
-
     for (let i = 0; i < almanac.seeds.length - 1; i += 2) {
         seedRanges.push([almanac.seeds[i], almanac.seeds[i] + almanac.seeds[i + 1]]);
     }
 
-    console.log(seedRanges);
-
-    const locationsRanges = seedRanges.map((seedRange) =>
-        almanac.maps.reduce((newRanges, map) => mapRanges(newRanges, map), [seedRange]),
+    const locationsRanges = almanac.maps.reduce(
+        (newRanges, map) => mapRanges(newRanges, map),
+        seedRanges,
     );
 
-    return 0;
+    return locationsRanges.sort(([s1], [s2]) => s1 - s2)[0][0];
 };
 
 // -------------
 // Solve problem
 // -------------
 
-// const problem1: Solver = () => findLowestLocationBySeed(INPUT);
+const problem1: Solver = () => findLowestLocationBySeed(INPUT);
 
-const problem2: Solver = () => findLowestLocationBySeedRange(TEST_INPUT);
+const problem2: Solver = () => findLowestLocationBySeedRange(INPUT);
 
 // ---------------
 // Display answers
 // ---------------
 
-// solveWithLogs(problem1, 1);
-// 177942185
+solveWithLogs(problem1, 1);
+// 177942185 => Yeah !
 
 solveWithLogs(problem2, 2);
+// 69841803 => Yeah !

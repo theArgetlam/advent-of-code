@@ -112,24 +112,30 @@ const countGhostStepsBruteForce = (start: string, stop: string, network: Network
 };
 
 const countGhostStepsOptimized = (start: string, stop: string, network: Network): number => {
-    const step = 0;
     const currentPositions = Object.keys(network.nodes).filter((position) =>
         position.endsWith(start),
     );
 
-    // console.log({ currentPositions });
+    const firstFound = currentPositions.map((startingPosition) => {
+        let currentPosition = startingPosition;
+        let step = 0;
 
-    // while (!currentPositions.every((position) => position.endsWith(stop))) {
-    //     const nextDirection = network.directions.charAt(step % network.directions.length);
-    //     currentPositions = currentPositions.map(
-    //         (currentPosition) => network.nodes[currentPosition][nextDirection],
-    //     );
-    //     step++;
+        while (!currentPosition.endsWith(stop)) {
+            currentPosition =
+                network.nodes[currentPosition][
+                    network.directions.charAt(step % network.directions.length)
+                ];
+            step++;
+        }
 
-    //     if (step % 1000000 === 0) console.log({ step, currentPositions });
-    // }
+        return step;
+    });
 
-    return step;
+    console.log({ firstFound });
+
+    // Find smallest common multiplier
+
+    return 0;
 };
 
 const problem2Solution = (input: Input) => {
@@ -144,7 +150,7 @@ const problem2Solution = (input: Input) => {
 
 const problem1: Solver = () => problem1Solution(INPUT);
 
-const problem2: Solver = () => problem2Solution(TEST_INPUT2);
+const problem2: Solver = () => problem2Solution(INPUT);
 
 // ---------------
 // Display answers
@@ -160,3 +166,6 @@ solveWithLogs(problem2, 2);
 //     currentPositions: [ 'SLK', 'CTN', 'XCX', 'HCH', 'NQV', 'RKD' ]
 // }
 // Must find an optimized solution :thinking:
+
+// Approach with smallest common multiplier
+// 14616363770447 => Yeah !
