@@ -9,7 +9,14 @@ import { Solver } from 'utils/solver';
 
 type Input = string[];
 
-const testInputRaw = ``;
+const testInputRaw = `abcdef
+bababc
+abbcde
+abcccd
+aabcdd
+abcdee
+ababab
+`;
 
 export const TEST_INPUT: Input = testInputRaw.split('\n');
 export const INPUT: Input = readInput(path.resolve(__dirname, './input.txt')).split('\n');
@@ -19,14 +26,32 @@ export const INPUT: Input = readInput(path.resolve(__dirname, './input.txt')).sp
 // -------------------
 
 const myFunction = (input: Input) => {
-    return "This ain't gonna solve itself alone !";
+    let pairs = 0;
+    let trios = 0;
+
+    for (const id of input) {
+        const map = {};
+
+        for (const letter of id.split('')) {
+            map[letter] = (map[letter] ?? 0) + 1;
+        }
+
+        if (Object.values(map).some((v) => v === 2)) {
+            pairs++;
+        }
+        if (Object.values(map).some((v) => v === 3)) {
+            trios++;
+        }
+    }
+
+    return pairs * trios;
 };
 
 // -------------
 // Solve problem
 // -------------
 
-const problem1: Solver = () => myFunction(TEST_INPUT);
+const problem1: Solver = () => myFunction(INPUT);
 
 // const problem2: Solver = () => myFunction(TEST_INPUT);
 
