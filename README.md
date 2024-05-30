@@ -1,6 +1,6 @@
 # Advent of Code
 
-Ce mini projet est un template pour répondre aux énigmes journalières du advent of code.
+Ce mini projet est un template pour répondre aux énigmes journalières du [advent of code](https://adventofcode.com/).
 
 ## Technos
 
@@ -11,7 +11,7 @@ Ce template vous permet de répondre aux énigmes en :
 
 ## Initialisation
 
-- Forkez le projet
+- Fork le projet
 - Récupérez le template localement
 - Installez les dépendances
 
@@ -24,15 +24,15 @@ $ yarn install
 - Créez le sous-dossier correspondant à la journée:
 
 ```bash
-$ yarn new day01
+$ ./createDay.sh <année> <jour>
 ```
 
-- Placer l'input dans le fichier `day01/input.txt`.
+- Placez l'input dans le fichier `<année>/<jour>/input.txt`.
 
 - Faites tourner votre solution:
 
 ```bash
-$ yarn start day01
+$ yarn start <année>/<jour>
 ```
 
 ## Commandes
@@ -40,19 +40,19 @@ $ yarn start day01
 - Créer un sous-dossier
 
 ```bash
-$ yarn new day01
+$ ./createDay.sh <année> <jour>
 ```
 
 - Lancer le code
 
 ```bash
-$ yarn start day01
+$ yarn start <année>/<jour>
 ```
 
 - Lancer les tests
 
 ```bash
-$ yarn test day01
+$ yarn test <année>/<jour>
 ```
 
 - Tests lint et typescript
@@ -65,8 +65,5 @@ $ yarn type-check
 ## Template collaboratif
 
 Si vous voyez des améliorations à apporter à ce template, sentez vous libre d'y apporter des modifications ! :) 
-
-
-
 
 Happy Advent of Code !
